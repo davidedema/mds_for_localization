@@ -1,9 +1,9 @@
 function main_emds_distributed()
             % Simulation parameters
-            n = 30;              % Number of nodes (increased for better connectivity)
+            n = 30;              % Number of nodes 
             sigma_d = 0.3;       % Standard deviation for distance measurements (meters)
-            arena_size = 15;     % Size of the arena (meters) (reduced for higher density)
-            max_range = 10;      % Maximum communication range (meters) (increased)
+            arena_size = 15;     % Size of the arena (meters) 
+            max_range = 10;      % Maximum communication range (meters) 
             
             fprintf('Starting robust distributed MDS simulation with %d nodes...\n', n);
             

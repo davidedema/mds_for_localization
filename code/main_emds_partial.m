@@ -3,7 +3,7 @@
 function main_emds_partial()
     % Simulation parameters
     n = 10;             % Total number of nodes 
-    m = 5;              % Number of fully connected nodes
+    m = 7;              % Number of fully connected nodes
     sim_time = 100;     % Simulation time in (s)
     delta_t = 1;        % Time step in (s)
     sigma_d = 0.3;      % Standard deviation for distance measurements (m)

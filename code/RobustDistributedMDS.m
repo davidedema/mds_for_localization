@@ -74,7 +74,7 @@ classdef RobustDistributedMDS
             % Compute translation
             t = target_centroid' - R * source_centroid';
             
-            transform = struct('rotation', R, 'translation', t', 'scale', scale);
+            transform = struct('rotation', R, 'translation', t', 'scale', 1);
         end
         
         function quads = find_robust_quads(node_idx, D, dmin)

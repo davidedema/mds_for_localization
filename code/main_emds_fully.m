@@ -1,7 +1,7 @@
 %% MAIN EMDS 
 function main_emds_fully()
     % Simulation parameters
-    n = 6;              % Number of nodes
+    n = 10;              % Number of nodes
     sim_time = 100;     % Simulation time in (s)
     delta_t = 1;        % Time step in (s)
     sigma_d = 0.3;      % Standard deviation for distance measurements (m) 
