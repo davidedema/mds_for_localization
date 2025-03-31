@@ -211,7 +211,7 @@ classdef RobustDistributedMDS
             
             n = size(D, 1);
             positions = zeros(n, 2);
-            localized_nodes = central_node;  % Start with central node
+            localized_nodes = central_node; 
             
             % Start with the first quad in the component
             first_quad_idx = component(1);

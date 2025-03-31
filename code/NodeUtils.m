@@ -108,48 +108,5 @@ classdef NodeUtils
             % Calculate the average Euclidean distance
             error = mean(sqrt(sum((X_real - X_hat_aligned).^2, 2)));
         end
-
-        % Generate connectivity matrix for partially connected network
-        function W = generate_connectivity_matrix(n, m)
-            W = zeros(n, n);
-            
-            % First m nodes are fully connected with each other
-            W(1:m, 1:m) = 1;
-            
-            % Other n-m nodes only communicate with the first m nodes
-            W(m+1:n, 1:m) = 1;
-            W(1:m, m+1:n) = 1;
-            
-            % Set diagonal elements to 0 (no self-connections)
-            for i = 1:n
-                W(i, i) = 0;
-            end
-        end
-        
-        % Generate distance matrix with noise, respecting connectivity constraints
-        function D = generate_partial_distance_matrix(X, sigma_d, W)
-            n = size(X, 1);
-            D = zeros(n, n);
-            
-            for i = 1:n
-                for j = 1:n
-                    if i == j
-                        % Set diagonal to zero
-                        D(i, j) = 0;
-                    elseif W(i, j) == 1
-                        % True distance
-                        true_dist = norm(X(i, :) - X(j, :));
-                        
-                        % Add noise while ensuring distance is non-negative
-                        D(i, j) = max(0.1, true_dist + normrnd(0, sigma_d));
-                        D(j, i) = D(i, j); % Ensure matrix is symmetric
-                    else
-                        % Set disconnected nodes' distances to NaN
-                        D(i, j) = NaN;
-                        D(j, i) = NaN;
-                    end
-                end
-            end
-        end
     end
 end
