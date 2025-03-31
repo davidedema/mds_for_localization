@@ -5,10 +5,9 @@ function X_hat = emds(D_prev, D_curr, X_prev, V_hat, delta_t)
     % Initialize optimization variables (2n variables)
     % First n variables are positions at t-1, last n are positions at t
     X0 = zeros(2*n, dim);
-    X0(1:n, :) = X_prev;  % Initial guess for t-1 positions
-    X0(n+1:end, :) = X_prev + V_hat * delta_t;  % Initial guess for t positions
+    X0(1:n, :) = X_prev;  
+    X0(n+1:end, :) = X_prev + V_hat * delta_t;  
     
-    % Define the objective function
     stress_fun = @(x) emds_stress_function(x, D_prev, D_curr, n, dim);
     
     % Define constraints (positions at t are related to positions at t-1 by velocity)
@@ -68,6 +67,5 @@ function stress = emds_stress_function(x, D_prev, D_curr, n, dim)
         end
     end
     
-    % Total stress
     stress = stress_prev + stress_curr;
 end
