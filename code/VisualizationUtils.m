@@ -220,112 +220,8 @@ classdef VisualizationUtils
             % Start animation
             animate();
         end
-
-        function visualize_results_distributed(X_true, localizable, conn_matrix)
-            % Visualize the results of the distributed MDS algorithm
-            
-            % Create figure
-            figure('Position', [100, 100, 900, 500]);
-            
-            % Plot node connectivity
-            subplot(1, 2, 1);
-            hold on;
-            grid on;
-            title('Node Connectivity Graph');
-            xlabel('X Coordinate (meters)');
-            ylabel('Y Coordinate (meters)');
-            
-            % Plot connectivity edges
-            n = size(X_true, 1);
-            for i = 1:n
-                for j = i+1:n
-                    if conn_matrix(i, j) == 1
-                        line([X_true(i,1), X_true(j,1)], ...
-                             [X_true(i,2), X_true(j,2)], ...
-                             'Color', [0.7 0.7 0.7], 'LineWidth', 0.5);
-                    end
-                end
-            end
-            
-            % Plot all nodes
-            scatter(X_true(:,1), X_true(:,2), 80, 'b', 'filled');
-            
-            % Add node labels
-            for i = 1:n
-                text(X_true(i,1)+0.2, X_true(i,2), num2str(i), 'FontSize', 8);
-            end
-            
-            % Plot localization results
-            subplot(1, 2, 2);
-            hold on;
-            grid on;
-            title('Distributed MDS Localization Results (Cluster Level)');
-            xlabel('X Coordinate (meters)');
-            ylabel('Y Coordinate (meters)');
-            
-            % Plot all nodes (gray for non-localized)
-            scatter(X_true(:,1), X_true(:,2), 80, [0.7 0.7 0.7], 'filled');
-            
-            % Highlight localized nodes
-            localized_nodes = find(localizable);
-            scatter(X_true(localized_nodes,1), X_true(localized_nodes,2), 80, 'r', 'filled');
-            
-            % Add node labels
-            for i = 1:n
-                color = 'k';
-                if localizable(i)
-                    color = 'r';
-                end
-                text(X_true(i,1)+0.2, X_true(i,2), num2str(i), 'FontSize', 8, 'Color', color);
-            end
-            
-            % Add legend
-            legend_handles = zeros(2, 1);
-            legend_handles(1) = plot(NaN, NaN, 'o', 'MarkerSize', 8, 'MarkerFaceColor', [0.7 0.7 0.7], 'MarkerEdgeColor', 'none');
-            legend_handles(2) = plot(NaN, NaN, 'o', 'MarkerSize', 8, 'MarkerFaceColor', 'r', 'MarkerEdgeColor', 'none');
-            legend(legend_handles, {'Non-localizable Node', 'Localizable Node'}, 'Location', 'best');
-            
-            % Set axis properties
-            subplot(1, 2, 1); axis equal;
-            subplot(1, 2, 2); axis equal;
-            
-            % Create a second figure for network statistics
-            figure('Position', [1000, 100, 500, 400]);
-            
-            % Compute node degree statistics
-            degrees = sum(conn_matrix, 2);
-            localized_degrees = degrees(localizable);
-            nonlocalized_degrees = degrees(~localizable);
-            
-            % Create histogram of node degrees
-            histogram(degrees, 'FaceColor', [0.7 0.7 0.7]);
-            hold on;
-            histogram(localized_degrees, 'FaceColor', 'r');
-            
-            title('Node Degree Distribution');
-            xlabel('Node Degree');
-            ylabel('Number of Nodes');
-            legend('All Nodes', 'Localizable Nodes', 'Location', 'best');
-            grid on;
-            
-            % Add text with statistics
-            avg_degree = mean(degrees);
-            text(0.05, 0.92, sprintf('Average degree: %.1f', avg_degree), ...
-                'Units', 'normalized', 'FontSize', 12);
-            
-            if ~isempty(localized_degrees)
-                avg_localized_degree = mean(localized_degrees);
-                text(0.05, 0.85, sprintf('Avg. degree of localizable nodes: %.1f', avg_localized_degree), ...
-                    'Units', 'normalized', 'FontSize', 12);
-            end
-            
-            localizable_pct = 100 * sum(localizable) / length(localizable);
-            text(0.05, 0.78, sprintf('Localizable nodes: %.1f%%', localizable_pct), ...
-                'Units', 'normalized', 'FontSize', 12);
-        end
         
-        
-        function visualize_global_results_distributed(X_true, global_nodes, global_positions, conn_matrix)
+        function visualize_results_distributed(X_true, global_nodes, global_positions, conn_matrix)
             % Create figure
             figure('Position', [100, 600, 900, 500]);
             
@@ -361,7 +257,7 @@ classdef VisualizationUtils
             subplot(1, 2, 2);
             hold on;
             grid on;
-            title('Global Coordinate System (Phase III)');
+            title('Global Coordinate System');
             xlabel('X Coordinate (meters)');
             ylabel('Y Coordinate (meters)');
             
@@ -426,25 +322,6 @@ classdef VisualizationUtils
                 'Units', 'normalized', 'FontSize', 10);
             text(0.05, 0.15, sprintf('Nodes in global system: %d/%d', length(global_nodes), n), ...
                 'Units', 'normalized', 'FontSize', 10);
-                
-            % Create a second figure for error distribution
-            figure('Position', [1000, 600, 500, 400]);
-            
-            % Plot histogram of errors
-            histogram(errors, 10, 'FaceColor', 'g');
-            title('Distribution of Localization Errors');
-            xlabel('Error (meters)');
-            ylabel('Number of Nodes');
-            grid on;
-            
-            % Add text with error statistics
-            text(0.05, 0.92, sprintf('Mean error: %.2f meters', mean_error), ...
-                'Units', 'normalized', 'FontSize', 12);
-            text(0.05, 0.85, sprintf('Max error: %.2f meters', max_error), ...
-                'Units', 'normalized', 'FontSize', 12);
-            text(0.05, 0.78, sprintf('Nodes in global system: %d/%d (%.1f%%)', ...
-                length(global_nodes), n, 100*length(global_nodes)/n), ...
-                'Units', 'normalized', 'FontSize', 12);
         end
     end
 end

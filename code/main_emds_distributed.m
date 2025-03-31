@@ -1,9 +1,9 @@
 function main_emds_distributed()
             % Simulation parameters
             n = 30;              % Number of nodes 
-            sigma_d = 0.3;       % Standard deviation for distance measurements (meters)
-            arena_size = 15;     % Size of the arena (meters) 
-            max_range = 10;      % Maximum communication range (meters) 
+            sigma_d = 0.1;       % Standard deviation for distance measurements (meters)
+            arena_size = 20;     % Size of the arena (meters) 
+            max_range = 15;      % Maximum communication range (meters) 
             
             fprintf('Starting robust distributed MDS simulation with %d nodes...\n', n);
             
@@ -176,7 +176,7 @@ function main_emds_distributed()
                 fprintf('Nodes in global coordinate system: %d/%d (%.1f%%)\n', ...
                     sum(nodes_in_global), n, 100*sum(nodes_in_global)/n);
                 
-                VisualizationUtils.visualize_global_results_distributed(X_true, global_nodes, global_positions, conn_matrix);
+                VisualizationUtils.visualize_results_distributed(X_true, global_nodes, global_positions, conn_matrix);
                 
             else
                 fprintf('No clusters were localized.\n');
@@ -189,6 +189,5 @@ function main_emds_distributed()
             fprintf('\nCluster localization results:\n');
             fprintf('Nodes localizable: %d/%d (%.1f%%)\n', num_localizable, n, percent_localizable);
             fprintf('Average cluster size: %.1f nodes\n', avg_cluster_size);
-            
-            VisualizationUtils.visualize_results_distributed(X_true, localizable, conn_matrix);
+           
         end
