@@ -3,6 +3,7 @@ function X = mds(D, dim)
     n = size(D, 1);
     
     % Replace any NaN with the mean of non-NaN entries
+    % Used to handle missing distances -> not used in this project
     D_mean = mean(D(~isnan(D)));
     D(isnan(D)) = D_mean;
     
@@ -16,7 +17,7 @@ function X = mds(D, dim)
     % Make sure B is symmetric for numerical stability
     B = (B + B')/2;
     
-    % Eigendecomposition with robust handling
+    % Eigendecomposition
     [V, E] = eig(B);
     
     % Sort eigenvalues in descending order

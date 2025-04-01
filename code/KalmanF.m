@@ -41,12 +41,12 @@ classdef KalmanF
             z = [pos; vel'];
             
             % Update step
-            y = z - kf.H * kf.x;            % Innovation
-            S = kf.H * kf.P * kf.H' + kf.R; % Innovation covariance
-            K = kf.P * kf.H' / S;           % Kalman gain
+            y = z - kf.H * kf.x;                    % Innovation
+            S = kf.H * kf.P * kf.H' + kf.R;         % Innovation covariance
+            K = kf.P * kf.H' / S;                   % Kalman gain
             
-            kf.x = kf.x + K * y;            % Updated state estimate
-            kf.P = (eye(4) - K * kf.H) * kf.P; % Updated covariance
+            kf.x = kf.x + K * y;                    % Updated state estimate
+            kf.P = (eye(4) - K * kf.H) * kf.P;      % Updated covariance
         end
     end
 end

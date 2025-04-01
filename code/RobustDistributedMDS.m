@@ -21,7 +21,6 @@ classdef RobustDistributedMDS
             options = optimset('Display', 'off', 'MaxIter', 100, 'TolFun', 1e-6);
             X_flat = reshape(X', [], 1);  
             
-            % Perform optimization
             X_opt = fminsearch(stress_func, X_flat, options);
             
             X_opt_reshaped = reshape(X_opt, 2, n)';

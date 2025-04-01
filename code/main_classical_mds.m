@@ -25,7 +25,6 @@ function main_classical_mds()
     
     kf = KalmanF.initialize_kalman_filters(n);
     
-    % Main simulation loop
     fprintf('Starting main simulation loop...\n');
     for t = 2:sim_time
         [X, V, A] = NodeUtils.update_node_positions(X, V, A, delta_t, arena_size);
@@ -35,7 +34,6 @@ function main_classical_mds()
         
         D_hat = NodeUtils.generate_distance_matrix(X, sigma_d);
         
-        % Run classical MDS 
         X_mds = mds(D_hat, 2);
         
         if t > 1
@@ -66,6 +64,5 @@ function main_classical_mds()
     fprintf('\nSimulation completed.\n');
     fprintf('Final average error: %.2f meters\n', mean(errors));
     
-    fprintf('Generating visualization...\n');
     VisualizationUtils.visualize_results(X_real, X_hat, errors);
 end

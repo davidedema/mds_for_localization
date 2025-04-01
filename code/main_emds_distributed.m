@@ -1,6 +1,6 @@
 function main_emds_distributed()
             % Simulation parameters
-            n = 30;              % Number of nodes 
+            n = 15;              % Number of nodes 
             sigma_d = 0.1;       % Standard deviation for distance measurements (meters)
             arena_size = 20;     % Size of the arena (meters) 
             max_range = 15;      % Maximum communication range (meters) 
@@ -29,16 +29,14 @@ function main_emds_distributed()
                 end
             end
             
-            % Set robustness threshold based on noise
             dmin = 2.5 * sigma_d;  
+            % Estimated positions in local coordinate systems
+            X_hat = cell(n, 1);             
+            localizable = false(n, 1);      
+            cluster_sizes = zeros(n, 1);    
             
-            X_hat = cell(n, 1);             % Estimated positions in local coordinate systems
-            localizable = false(n, 1);      % Nodes that can be localized
-            cluster_sizes = zeros(n, 1);    % Size of each node's cluster
+            fprintf('Phase I: Performing cluster localization... \n');
             
-            fprintf('Phase I: Performing cluster localization at each node...\n');
-            
-            % Phase I: Cluster Localization
             for i = 1:n
                 quads = RobustDistributedMDS.find_robust_quads(i, D, dmin);
                 
@@ -56,21 +54,17 @@ function main_emds_distributed()
                 if ~isempty(components)
                     largest_component = components{largest_idx};
                 
-                    % Localize nodes in the largest component
                     [positions, localized_nodes] = RobustDistributedMDS.localize_component(i, quads, largest_component, D);
                     
                     localizable(localized_nodes) = true;
                     
-                    % Store positions in local coordinate system
                     X_hat{i} = struct('positions', positions, 'nodes', localized_nodes);
                     
-                    % Store cluster size
                     cluster_sizes(i) = length(localized_nodes);
                 end
             end
             
-            % Phase II: Cluster Optimization
-            fprintf('\nPhase II: Optimizing cluster localizations...\n');
+            fprintf('\nPhase II: Optimizing clusters ...\n');
             
             for i = 1:n
                 if cluster_sizes(i) > 0
@@ -87,7 +81,6 @@ function main_emds_distributed()
                 end
             end
             
-            % Phase III: Cluster Transformation
             fprintf('\nPhase III: Computing transformations between clusters...\n');
             
             % Initialize global coordinate system
@@ -103,11 +96,9 @@ function main_emds_distributed()
                 nodes_in_global = false(n, 1);
                 nodes_in_global(global_nodes) = true;
                 
-                % Keep track of which clusters have been merged
                 processed_clusters = false(n, 1);
                 processed_clusters(largest_cluster_idx) = true;
                 
-                % Repeatedly try to merge unprocessed clusters
                 made_progress = true;
                 while made_progress
                     made_progress = false;
@@ -126,7 +117,7 @@ function main_emds_distributed()
                             local_positions = X_hat{i}.positions(common_nodes, :);
                             global_common_positions = global_positions(common_nodes, :);
                             
-                            % Check if common nodes form a robust triangle for reliable transformation
+                            % Check if common nodes form a robust triangle 
                             robust_common = false;
                             if length(common_nodes) >= 3
                                 for a = 1:length(common_nodes)-2

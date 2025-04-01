@@ -6,11 +6,10 @@ classdef NodeUtils
             X = (rand(n, 2) - 0.5) * 2 * arena_size;
             
             % Initialize velocities randomly
-            speed = rand(n, 1) * 2;         % Random speed between 0 and 2 m/s
-            angle = rand(n, 1) * 2 * pi;    % Random angle between 0 and 2π
+            speed = rand(n, 1) * 2;         
+            angle = rand(n, 1) * 2 * pi;    
             V = [speed .* cos(angle), speed .* sin(angle)];
             
-            % Initialize accelerations as zeros
             A = zeros(n, 2);
         end
         

@@ -22,10 +22,8 @@ function main_emds_fully()
     D_hat = NodeUtils.generate_distance_matrix(X, sigma_d);
     X_hat(1, :, :) = mds(D_hat, 2);
     
-    % Kalman Filter initialization for each node
     kf = KalmanF.initialize_kalman_filters(n);
     
-    % Main simulation loop
     for t = 2:sim_time
         [X, V, A] = NodeUtils.update_node_positions(X, V, A, delta_t, arena_size);
         
@@ -37,7 +35,6 @@ function main_emds_fully()
         
         V_hat = NodeUtils.generate_velocity_measurements(V, sigma_v);
         
-        % Run enhanced MDS
         X_hat_t = emds(D_hat_prev, D_hat, squeeze(X_hat(t-1, :, :)), V_hat, delta_t);
         
         % Apply Kalman Filter for each node

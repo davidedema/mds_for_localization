@@ -6,7 +6,7 @@ disp('2. (Distributed) Robust MDS');
 disp('3. (Centralized) MDS');
 
 
-choice = input('Enter your choice (1, 2, 3 or 4): ');
+choice = input('Enter your choice (1, 2 or 3): ');
 
 switch choice
     case 1
@@ -19,5 +19,5 @@ switch choice
         disp('Running Classical MDS...');
         main_classical_mds();    
     otherwise
-        disp('Invalid choice. Please run the script again and select 1, 2, 3 or 4.');
+        disp('Invalid choice. Please run the script again and select 1, 2 or 3.');
 end
